@@ -35,6 +35,8 @@ public final class Main {
             Logger.info("Connecting to WhatsApp...");
             bot.start();
 
+            Thread.currentThread().join();
+
         } catch (Exception e) {
             Logger.error("Fatal error", e);
             System.exit(1);
