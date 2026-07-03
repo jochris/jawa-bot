@@ -18,7 +18,13 @@ public final class Router {
         commands.put(primaryTrigger, info);
 
         for (String a : cmd.alias()) {
-            commands.put(prefix + a.toLowerCase(), info);
+            String trigger = a.toLowerCase();
+            if (trigger.isEmpty()) continue;
+            char first = trigger.charAt(0);
+            if (Character.isLetterOrDigit(first)) {
+                trigger = prefix + trigger;
+            }
+            commands.put(trigger, info);
         }
     }
 
