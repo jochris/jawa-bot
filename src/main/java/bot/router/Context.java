@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: MIT
 package bot.router;
 
 import id.jawa.core.JaWaClient;
