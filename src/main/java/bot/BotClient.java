@@ -98,7 +98,8 @@ public final class BotClient {
 
     private boolean isSelf(String jidStr) {
         if (jidStr == null || client.creds() == null) return false;
-        id.jawa.util.Jid jid = id.jawa.util.Jid.parse(jidStr);
+        String resolved = client.resolvePnJid(jidStr);
+        id.jawa.util.Jid jid = id.jawa.util.Jid.parse(resolved);
         if (jid == null) return false;
 
         if (client.creds().meJid != null) {
