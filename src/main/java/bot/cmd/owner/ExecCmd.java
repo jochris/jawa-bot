@@ -36,7 +36,8 @@ public final class ExecCmd implements Cmd {
 
     @Override
     public void handle(Context ctx) throws Exception {
-        Jid sender = Jid.parse(ctx.senderJid());
+        String senderPnJid = ctx.client().resolvePnJid(ctx.senderJid());
+        Jid sender = Jid.parse(senderPnJid);
         if (sender == null || !sender.user().equals(Config.OWNER_NUMBER)) {
             ctx.reply("❌ " + Serialize.bold("Akses Ditolak!") + "\n\nHanya owner yang dapat menggunakan perintah ini.");
             return;
