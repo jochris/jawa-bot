@@ -4,6 +4,7 @@ package bot;
 import bot.cmd.general.*;
 import bot.cmd.utility.*;
 import bot.cmd.owner.*;
+import bot.cmd.test.*;
 import bot.router.Context;
 import bot.router.Router;
 import id.jawa.core.JaWaClient;
@@ -30,6 +31,7 @@ public final class BotClient {
         router.register(Config.PREFIX, new InfoCmd());
         router.register(Config.PREFIX, helpCmd);
         router.register(Config.PREFIX, new ExecCmd());
+        router.register(Config.PREFIX, new TestCmd());
 
         router.registerInteractive("ping_cmd", new PingCmd());
         router.registerInteractive("info_cmd", new InfoCmd());
