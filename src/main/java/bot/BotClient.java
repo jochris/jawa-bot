@@ -3,6 +3,7 @@ package bot;
 
 import bot.cmd.general.*;
 import bot.cmd.utility.*;
+import bot.cmd.owner.*;
 import bot.router.Context;
 import bot.router.Router;
 import id.jawa.core.JaWaClient;
@@ -28,6 +29,7 @@ public final class BotClient {
         router.register(Config.PREFIX, new PingCmd());
         router.register(Config.PREFIX, new InfoCmd());
         router.register(Config.PREFIX, helpCmd);
+        router.register(Config.PREFIX, new ExecCmd());
 
         router.registerInteractive("ping_cmd", new PingCmd());
         router.registerInteractive("info_cmd", new InfoCmd());
@@ -42,13 +44,11 @@ public final class BotClient {
         client.listener(new JaWaClient.Listener() {
             @Override
             public void onQr(List<String> qrStrings) {
-                String phone = Config.OWNER_NUMBER;
-                if (phone == null || phone.isBlank()) {
-                    System.out.print("\n[Pairing] Enter your phone number (e.g. 62895416602000): ");
-                    java.util.Scanner scanner = new java.util.Scanner(System.in);
-                    if (scanner.hasNextLine()) {
-                        phone = scanner.nextLine().trim();
-                    }
+                System.out.print("\n[Pairing] Enter the BOT phone number (e.g. 6283192674554): ");
+                java.util.Scanner scanner = new java.util.Scanner(System.in);
+                String phone = null;
+                if (scanner.hasNextLine()) {
+                    phone = scanner.nextLine().trim();
                 }
                 if (phone != null && !phone.isBlank()) {
                     Serialize.info("Requesting pairing code for: " + phone);
