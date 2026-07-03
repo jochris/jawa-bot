@@ -82,11 +82,11 @@ public final class ExecCmd implements Cmd {
             }
 
             ctx.reply("💻 " + Serialize.bold("Exec Result") + " (Exit: " + exitCode + ")\n\n"
-                    + Serialize.mono(res));
+                    + res);
             ctx.react("✅");
 
         } catch (Exception e) {
-            ctx.reply("❌ " + Serialize.bold("Exec Error") + "\n\n" + Serialize.code(e.getMessage()));
+            ctx.reply("❌ " + Serialize.bold("Exec Error") + "\n\n" + e.getMessage());
             ctx.react("❌");
         }
     }

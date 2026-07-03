@@ -20,7 +20,9 @@ public record Context(
 ) {
 
     public CompletableFuture<String> reply(Wa.Message msg) {
-        return client.sendMessage(chatJid, msg);
+        String quotedText = text != null ? text : (interactiveId != null ? interactiveId : "");
+        Wa.Message quoted = MessageEncoder.quote(msg, messageId, senderJid, quotedText);
+        return client.sendMessage(chatJid, quoted);
     }
 
     public CompletableFuture<String> reply(String text) {
