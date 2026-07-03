@@ -6,13 +6,13 @@ import id.jawa.core.JaWaClient;
 public final class Main {
 
     public static void main(String[] args) {
-        Serialize.banner();
+        Logger.banner();
 
         String sessionPath = Config.sessionPath();
-        Serialize.config("Session", sessionPath);
-        Serialize.config("Prefix", Config.PREFIX);
-        Serialize.config("Bot Name", Config.BOT_NAME);
-        Serialize.divider();
+        Logger.config("Session", sessionPath);
+        Logger.config("Prefix", Config.PREFIX);
+        Logger.config("Bot Name", Config.BOT_NAME);
+        Logger.divider();
 
         try {
             java.nio.file.Path sessionFile = java.nio.file.Path.of(sessionPath);
@@ -28,15 +28,15 @@ public final class Main {
             var bot = new BotClient(client);
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                Serialize.warn("Shutting down...");
+                Logger.warn("Shutting down...");
                 client.close();
             }));
 
-            Serialize.info("Connecting to WhatsApp...");
+            Logger.info("Connecting to WhatsApp...");
             bot.start();
 
         } catch (Exception e) {
-            Serialize.error("Fatal error", e);
+            Logger.error("Fatal error", e);
             System.exit(1);
         }
     }

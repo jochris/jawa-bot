@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 package bot.router;
 
+import bot.Logger;
 import bot.Serialize;
 import bot.cmd.Cmd;
 
@@ -38,11 +39,11 @@ public final class Router {
             if (interactiveId != null && !interactiveId.isBlank()) {
                 Cmd handler = interactiveHandlers.get(interactiveId);
                 if (handler != null) {
-                    Serialize.debug("Interactive route: " + interactiveId);
+                    Logger.debug("Interactive route: " + interactiveId);
                     handler.handle(ctx);
                     return;
                 }
-                Serialize.warn("Unknown interactive ID: " + interactiveId);
+                Logger.warn("Unknown interactive ID: " + interactiveId);
                 return;
             }
 
@@ -52,13 +53,13 @@ public final class Router {
 
             for (var entry : commands.entrySet()) {
                 if (lower.startsWith(entry.getKey())) {
-                    Serialize.debug("Command route: " + entry.getKey());
+                    Logger.debug("Command route: " + entry.getKey());
                     entry.getValue().handler().handle(ctx);
                     return;
                 }
             }
         } catch (Exception e) {
-            Serialize.error("Handler error", e);
+            Logger.error("Handler error", e);
         }
     }
 

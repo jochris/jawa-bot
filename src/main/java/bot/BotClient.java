@@ -38,7 +38,7 @@ public final class BotClient {
         router.registerInteractive("help_cmd", helpCmd);
         router.registerInteractive("menu_cmd", new MenuCmd());
 
-        Serialize.success("Registered " + router.getCommands().size() + " commands (including aliases), "
+        Logger.success("Registered " + router.getCommands().size() + " commands (including aliases), "
                 + router.getInteractiveCount() + " interactive handlers");
     }
 
@@ -53,29 +53,29 @@ public final class BotClient {
                     phone = scanner.nextLine().trim();
                 }
                 if (phone != null && !phone.isBlank()) {
-                    Serialize.info("Requesting pairing code for: " + phone);
+                    Logger.info("Requesting pairing code for: " + phone);
                     client.requestPairingCode(phone, null).whenComplete((code, err) -> {
                         if (err != null) {
-                            Serialize.error("Pairing code request failed", err);
+                            Logger.error("Pairing code request failed", err);
                             return;
                         }
                         String formattedCode = code.substring(0, 4) + "-" + code.substring(4);
-                        System.out.println("\n" + Serialize.BOLD + Serialize.GREEN 
-                            + "====================================" + Serialize.RESET);
-                        System.out.println("  " + Serialize.BOLD + "Pairing Code: " + Serialize.YELLOW + formattedCode + Serialize.RESET);
-                        System.out.println(Serialize.BOLD + Serialize.GREEN 
-                            + "====================================" + Serialize.RESET + "\n");
+                        System.out.println("\n" + Logger.BOLD + Logger.GREEN 
+                            + "====================================" + Logger.RESET);
+                        System.out.println("  " + Logger.BOLD + "Pairing Code: " + Logger.YELLOW + formattedCode + Logger.RESET);
+                        System.out.println(Logger.BOLD + Logger.GREEN 
+                            + "====================================" + Logger.RESET + "\n");
                     });
                 } else {
-                    Serialize.info("No phone number entered, scanning via QR:");
+                    Logger.info("No phone number entered, scanning via QR:");
                     id.jawa.util.QrTerminal.render(qrStrings.getFirst());
                 }
             }
 
             @Override
             public void onConnected() {
-                Serialize.success("Connected to WhatsApp!");
-                Serialize.divider();
+                Logger.success("Connected to WhatsApp!");
+                Logger.divider();
             }
 
             @Override
@@ -85,14 +85,14 @@ public final class BotClient {
 
             @Override
             public void onTerminated(JaWaClient.TerminationReason reason, String detail, boolean permanent) {
-                Serialize.error("Disconnected: " + reason + " (detail=" + detail + ", permanent=" + permanent + ")");
+                Logger.error("Disconnected: " + reason + " (detail=" + detail + ", permanent=" + permanent + ")");
             }
         });
 
         try {
             client.connect();
         } catch (Exception e) {
-            Serialize.error("Connection failed", e);
+            Logger.error("Connection failed", e);
         }
     }
 
@@ -133,7 +133,7 @@ public final class BotClient {
                 return;
             }
 
-            Serialize.incoming(sender, chat, text != null ? text : (interactiveId != null ? "⚡ " + interactiveId : null));
+            Logger.incoming(sender, chat, text != null ? text : (interactiveId != null ? "⚡ " + interactiveId : null));
 
             if ((text == null || text.isBlank()) && (interactiveId == null || interactiveId.isBlank())) {
                 return;
@@ -147,7 +147,7 @@ public final class BotClient {
             router.route(ctx);
 
         } catch (Exception e) {
-            Serialize.error("Handler exception", e);
+            Logger.error("Handler exception", e);
         }
     }
 }
