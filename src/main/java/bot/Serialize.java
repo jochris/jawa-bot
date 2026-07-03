@@ -99,7 +99,7 @@ public final class Serialize {
     }
 
     public static String mono(String text) {
-        return "```" + text + "```";
+        return "```\n" + text + "\n```";
     }
 
     public static String code(String text) {
