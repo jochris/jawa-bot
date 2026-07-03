@@ -1,15 +1,16 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-package bot.handler;
+package bot.cmd.general;
 
 import bot.Serialize;
+import bot.cmd.Cmd;
 import bot.router.Context;
 
 /**
- * Ping-pong handler. Measures response latency.
+ * Ping-pong command that measures message latency.
  *
  * <p>Trigger: {@code .ping} or interactive {@code ping_cmd}
  */
-public final class PingHandler implements Handler {
+public final class PingCmd implements Cmd {
 
     @Override
     public void handle(Context ctx) throws Exception {

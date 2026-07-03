@@ -2,7 +2,7 @@
 package bot.router;
 
 import bot.Serialize;
-import bot.handler.Handler;
+import bot.cmd.Cmd;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,23 +13,23 @@ import java.util.stream.Collectors;
  *
  * <p>Usage:
  * <pre>{@code
- *   router.register(".ping", "Check bot", "General", new PingHandler());
- *   router.registerInteractive("ping_cmd", new PingHandler());
+ *   router.register(".ping", "Check bot", "General", new PingCmd());
+ *   router.registerInteractive("ping_cmd", new PingCmd());
  *   router.route(ctx);
  * }</pre>
  */
 public final class Router {
 
     private final Map<String, CommandInfo> commands = new LinkedHashMap<>();
-    private final Map<String, Handler> interactiveHandlers = new LinkedHashMap<>();
+    private final Map<String, Cmd> interactiveHandlers = new LinkedHashMap<>();
 
     /** Register a text command handler. */
-    public void register(String command, String description, String category, Handler handler) {
+    public void register(String command, String description, String category, Cmd handler) {
         commands.put(command.toLowerCase(), new CommandInfo(command, description, category, handler));
     }
 
     /** Register an interactive button click handler by ID. */
-    public void registerInteractive(String id, Handler handler) {
+    public void registerInteractive(String id, Cmd handler) {
         interactiveHandlers.put(id, handler);
     }
 
@@ -46,7 +46,7 @@ public final class Router {
             // 1. Interactive button clicks
             String interactiveId = ctx.interactiveId();
             if (interactiveId != null && !interactiveId.isBlank()) {
-                Handler handler = interactiveHandlers.get(interactiveId);
+                Cmd handler = interactiveHandlers.get(interactiveId);
                 if (handler != null) {
                     Serialize.debug("Interactive route: " + interactiveId);
                     handler.handle(ctx);

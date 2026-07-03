@@ -17,12 +17,14 @@ jawa-bot/
     │   ├── Router.java                      # Command routing engine
     │   ├── Context.java                     # Message context with helpers
     │   └── CommandInfo.java                 # Command metadata record
-    └── handler/
-        ├── Handler.java                     # Handler functional interface
-        ├── MenuHandler.java                 # Interactive menu (.menu)
-        ├── PingHandler.java                 # Ping-pong (.ping)
-        ├── InfoHandler.java                 # System info (.info)
-        └── HelpHandler.java                # Help listing (.help)
+    └── cmd/
+        ├── Cmd.java                         # Command functional interface
+        ├── general/
+        │   ├── MenuCmd.java                 # Interactive menu (.menu)
+        │   └── PingCmd.java                 # Ping-pong (.ping)
+        └── utility/
+            ├── InfoCmd.java                 # System info (.info)
+            └── HelpCmd.java                 # Help listing (.help)
 ```
 
 ## 🚀 Quick Start
@@ -31,27 +33,25 @@ jawa-bot/
 # 1. Build
 mvn compile
 
-# 2. Run (first time - scan QR)
-mvn exec:java -Dbot.session=sessions/mybot.session
-
-# 3. Run (reconnect)
+# 2. Run (launches pairing code flow automatically if no session exists)
 mvn exec:java -Dbot.session=sessions/mybot.session
 ```
 
 ## ➕ Adding a New Command
 
-1. Create `src/main/java/bot/handler/MyHandler.java`:
+1. Create a command class under the appropriate category folder, e.g. `src/main/java/bot/cmd/general/MyCmd.java`:
 
 ```java
 // SPDX-License-Identifier: GPL-3.0-or-later
-package bot.handler;
+package bot.cmd.general;
 
+import bot.cmd.Cmd;
 import bot.router.Context;
 
-public final class MyHandler implements Handler {
+public final class MyCmd implements Cmd {
     @Override
     public void handle(Context ctx) throws Exception {
-        ctx.reply("Hello from my handler!");
+        ctx.reply("Hello from my command!");
     }
 }
 ```
@@ -59,7 +59,7 @@ public final class MyHandler implements Handler {
 2. Register in `BotClient.java`:
 
 ```java
-router.register(".mycommand", "My description", "MyCategory", new MyHandler());
+router.register(Config.PREFIX + "mycommand", "My description", "General", new MyCmd());
 ```
 
 ## 📖 Context API
@@ -80,11 +80,13 @@ router.register(".mycommand", "My description", "MyCategory", new MyHandler());
 
 Edit `Config.java` to customize:
 
-| Field       | Default       | Description               |
-|-------------|---------------|---------------------------|
-| `BOT_NAME`  | `"JaWa Bot"`  | Bot display name          |
-| `PREFIX`    | `"."`         | Command prefix            |
-| `VERSION`   | `"1.0.0"`     | Bot version               |
+| Field          | Default             | Description                                     |
+|----------------|---------------------|-------------------------------------------------|
+| `BOT_NAME`     | `"JaWa Bot"`        | Bot display name                                |
+| `PREFIX`       | `"."`               | Command prefix                                  |
+| `VERSION`      | `"1.0.0"`           | Bot version                                     |
+| `SELF`         | `false`             | Only respond to bot's own pairing number        |
+| `OWNER_NUMBER` | `"62895416602000"`  | Owner's phone number for auto-pairing           |
 
 ## 📜 License
 

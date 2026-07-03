@@ -1,16 +1,17 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-package bot.handler;
+package bot.cmd.utility;
 
 import bot.Config;
 import bot.Serialize;
+import bot.cmd.Cmd;
 import bot.router.Context;
 
 /**
- * System info handler. Displays bot runtime information.
+ * System information command.
  *
  * <p>Trigger: {@code .info} or interactive {@code info_cmd}
  */
-public final class InfoHandler implements Handler {
+public final class InfoCmd implements Cmd {
 
     @Override
     public void handle(Context ctx) throws Exception {

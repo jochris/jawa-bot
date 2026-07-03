@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-package bot.handler;
+package bot.cmd.utility;
 
 import bot.Config;
 import bot.Serialize;
+import bot.cmd.Cmd;
 import bot.router.CommandInfo;
 import bot.router.Context;
 import bot.router.Router;
@@ -11,15 +12,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Help handler. Lists all registered commands grouped by category.
+ * Help command listing all registered text commands.
  *
  * <p>Trigger: {@code .help} or interactive {@code help_cmd}
  */
-public final class HelpHandler implements Handler {
+public final class HelpCmd implements Cmd {
 
     private final Router router;
 
-    public HelpHandler(Router router) {
+    public HelpCmd(Router router) {
         this.router = router;
     }
 
