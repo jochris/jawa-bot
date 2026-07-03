@@ -3,14 +3,6 @@ package bot;
 
 import id.jawa.core.JaWaClient;
 
-/**
- * Entry point for the JaWa Bot Starter Kit.
- *
- * <p>Usage:
- * <pre>{@code
- *   mvn exec:java -Dbot.session=sessions/mybot.session
- * }</pre>
- */
 public final class Main {
 
     public static void main(String[] args) {
@@ -35,7 +27,6 @@ public final class Main {
             var client = new JaWaClient(store, signalDir).autoReconnect(true);
             var bot = new BotClient(client);
 
-            // Graceful shutdown
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 Serialize.warn("Shutting down...");
                 client.close();

@@ -4,17 +4,10 @@ package bot;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Pretty formatting utilities for console logs and WhatsApp message responses.
- *
- * <p>Provides ANSI-colored console output, WhatsApp markdown helpers,
- * and human-readable formatting for bytes, durations, and structured data.
- */
 public final class Serialize {
 
     private Serialize() {}
 
-    // ── ANSI Colors ──────────────────────────────────────────────────────
     public static final String RESET   = "\u001B[0m";
     public static final String RED     = "\u001B[31m";
     public static final String GREEN   = "\u001B[32m";
@@ -30,39 +23,30 @@ public final class Serialize {
     private static final DateTimeFormatter TIME_FMT =
             DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
-    // ── Console Logging ──────────────────────────────────────────────────
-
-    /** Info log with cyan tag. */
     public static void info(String message) {
         log(CYAN, "INFO", message);
     }
 
-    /** Success log with green tag. */
     public static void success(String message) {
         log(GREEN, " OK ", message);
     }
 
-    /** Warning log with yellow tag. */
     public static void warn(String message) {
         log(YELLOW, "WARN", message);
     }
 
-    /** Error log with red tag. */
     public static void error(String message) {
         log(RED, " ERR", message);
     }
 
-    /** Error log with red tag and exception. */
     public static void error(String message, Throwable t) {
         log(RED, " ERR", message + " → " + t.getMessage());
     }
 
-    /** Debug log with gray tag. */
     public static void debug(String message) {
         log(GRAY, "DBUG", message);
     }
 
-    /** Incoming message log. */
     public static void incoming(String sender, String chat, String text) {
         String ts = timestamp();
         String arrow = GREEN + "◄──" + RESET;
@@ -73,7 +57,6 @@ public final class Serialize {
         System.out.printf("%s %s %s%s │ %s%n", ts, arrow, senderFmt, chatFmt, textFmt);
     }
 
-    /** Outgoing message log. */
     public static void outgoing(String target, String msgId) {
         String ts = timestamp();
         String arrow = BLUE + "──►" + RESET;
@@ -90,9 +73,6 @@ public final class Serialize {
         return GRAY + LocalDateTime.now().format(TIME_FMT) + RESET;
     }
 
-    // ── Startup Banner ───────────────────────────────────────────────────
-
-    /** Print the startup banner. */
     public static void banner() {
         System.out.println();
         System.out.println(CYAN + BOLD + "  ╔══════════════════════════════════╗" + RESET);
@@ -102,46 +82,34 @@ public final class Serialize {
         System.out.println();
     }
 
-    /** Print a section divider. */
     public static void divider() {
         System.out.println(GRAY + "  ─────────────────────────────────────" + RESET);
     }
 
-    /** Print a key-value config line. */
     public static void config(String key, String value) {
         System.out.printf("  %s%-12s%s %s%s%s%n", DIM, key + ":", RESET, WHITE, value, RESET);
     }
 
-    // ── WhatsApp Markdown Helpers ────────────────────────────────────────
-
-    /** WhatsApp bold: *text* */
     public static String bold(String text) {
         return "*" + text + "*";
     }
 
-    /** WhatsApp italic: _text_ */
     public static String italic(String text) {
         return "_" + text + "_";
     }
 
-    /** WhatsApp monospace: ```text``` */
     public static String mono(String text) {
         return "```" + text + "```";
     }
 
-    /** WhatsApp inline code: `text` (not officially supported but renders on some clients) */
     public static String code(String text) {
         return "`" + text + "`";
     }
 
-    /** WhatsApp strikethrough: ~text~ */
     public static String strike(String text) {
         return "~" + text + "~";
     }
 
-    // ── Formatting Helpers ───────────────────────────────────────────────
-
-    /** Format milliseconds as human-readable duration: "2h 15m 30s" */
     public static String formatUptime(long millis) {
         long seconds = millis / 1000;
         long days = seconds / 86400;
@@ -157,7 +125,6 @@ public final class Serialize {
         return sb.toString();
     }
 
-    /** Format bytes as human-readable size: "128.5 MB" */
     public static String formatBytes(long bytes) {
         if (bytes < 1024) return bytes + " B";
         double kb = bytes / 1024.0;
@@ -168,7 +135,6 @@ public final class Serialize {
         return String.format("%.1f GB", gb);
     }
 
-    /** Truncate a JID for display: "6281234567890@s.whatsapp.net" → "628123..7890" */
     public static String truncateJid(String jid) {
         if (jid == null) return "?";
         int at = jid.indexOf('@');
@@ -182,7 +148,6 @@ public final class Serialize {
         return user;
     }
 
-    /** Build a key-value line for WhatsApp messages. */
     public static String field(String label, String value) {
         return "• " + bold(label) + ": " + value;
     }

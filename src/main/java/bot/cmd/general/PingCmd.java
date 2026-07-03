@@ -5,12 +5,27 @@ import bot.Serialize;
 import bot.cmd.Cmd;
 import bot.router.Context;
 
-/**
- * Ping-pong command that measures message latency.
- *
- * <p>Trigger: {@code .ping} or interactive {@code ping_cmd}
- */
 public final class PingCmd implements Cmd {
+
+    @Override
+    public String cmd() {
+        return "ping";
+    }
+
+    @Override
+    public String desc() {
+        return "Cek apakah bot aktif";
+    }
+
+    @Override
+    public String tag() {
+        return "general";
+    }
+
+    @Override
+    public String[] alias() {
+        return new String[]{"p", "pong"};
+    }
 
     @Override
     public void handle(Context ctx) throws Exception {

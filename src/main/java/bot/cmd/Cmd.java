@@ -3,11 +3,10 @@ package bot.cmd;
 
 import bot.router.Context;
 
-/**
- * Functional interface for bot commands.
- * Every command implements this to handle incoming WA message contexts.
- */
-@FunctionalInterface
 public interface Cmd {
     void handle(Context ctx) throws Exception;
+    String cmd();
+    String desc();
+    String tag();
+    String[] alias();
 }

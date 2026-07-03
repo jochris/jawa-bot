@@ -6,12 +6,27 @@ import bot.Serialize;
 import bot.cmd.Cmd;
 import bot.router.Context;
 
-/**
- * System information command.
- *
- * <p>Trigger: {@code .info} or interactive {@code info_cmd}
- */
 public final class InfoCmd implements Cmd {
+
+    @Override
+    public String cmd() {
+        return "info";
+    }
+
+    @Override
+    public String desc() {
+        return "Info sistem bot";
+    }
+
+    @Override
+    public String tag() {
+        return "utility";
+    }
+
+    @Override
+    public String[] alias() {
+        return new String[]{"sys", "system"};
+    }
 
     @Override
     public void handle(Context ctx) throws Exception {

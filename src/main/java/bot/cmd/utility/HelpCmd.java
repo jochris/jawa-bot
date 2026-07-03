@@ -11,17 +11,32 @@ import bot.router.Router;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Help command listing all registered text commands.
- *
- * <p>Trigger: {@code .help} or interactive {@code help_cmd}
- */
 public final class HelpCmd implements Cmd {
 
     private final Router router;
 
     public HelpCmd(Router router) {
         this.router = router;
+    }
+
+    @Override
+    public String cmd() {
+        return "help";
+    }
+
+    @Override
+    public String desc() {
+        return "Tampilkan semua perintah";
+    }
+
+    @Override
+    public String tag() {
+        return "utility";
+    }
+
+    @Override
+    public String[] alias() {
+        return new String[]{"h", "menu"};
     }
 
     @Override

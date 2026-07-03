@@ -10,10 +10,6 @@ import id.jawa.message.MessageReceiver;
 
 import java.util.List;
 
-/**
- * Bot lifecycle manager. Connects to WhatsApp via JaWa, registers
- * command handlers, and routes incoming messages.
- */
 public final class BotClient {
 
     private final JaWaClient client;
@@ -25,27 +21,23 @@ public final class BotClient {
         registerHandlers();
     }
 
-    /** Register all command and interactive handlers. */
     private void registerHandlers() {
         var helpCmd = new HelpCmd(router);
 
-        // ── Text Commands ────────────────────────────────────────────────
-        router.register(Config.PREFIX + "menu",  "Tampilkan menu bot",       "General", new MenuCmd());
-        router.register(Config.PREFIX + "ping",  "Cek apakah bot aktif",     "General", new PingCmd());
-        router.register(Config.PREFIX + "info",  "Info sistem bot",          "Utility", new InfoCmd());
-        router.register(Config.PREFIX + "help",  "Tampilkan semua perintah", "Utility", helpCmd);
+        router.register(Config.PREFIX, new MenuCmd());
+        router.register(Config.PREFIX, new PingCmd());
+        router.register(Config.PREFIX, new InfoCmd());
+        router.register(Config.PREFIX, helpCmd);
 
-        // ── Interactive Button Callbacks ─────────────────────────────────
         router.registerInteractive("ping_cmd", new PingCmd());
         router.registerInteractive("info_cmd", new InfoCmd());
         router.registerInteractive("help_cmd", helpCmd);
         router.registerInteractive("menu_cmd", new MenuCmd());
 
-        Serialize.success("Registered " + router.getCommands().size() + " commands, "
+        Serialize.success("Registered " + router.getCommands().size() + " commands (including aliases), "
                 + router.getInteractiveCount() + " interactive handlers");
     }
 
-    /** Setup listeners and start receiving messages. */
     public void start() {
         client.listener(new JaWaClient.Listener() {
             @Override
@@ -102,7 +94,6 @@ public final class BotClient {
         }
     }
 
-    /** Check if a given JID belongs to the bot itself (meJid or meLid). */
     private boolean isSelf(String jidStr) {
         if (jidStr == null || client.creds() == null) return false;
         id.jawa.util.Jid jid = id.jawa.util.Jid.parse(jidStr);
@@ -123,7 +114,6 @@ public final class BotClient {
         return false;
     }
 
-    /** Route an incoming decoded message to the appropriate handler. */
     private void handleMessage(MessageReceiver.Decoded decoded) {
         try {
             String sender = decoded.senderJid();
@@ -131,32 +121,26 @@ public final class BotClient {
             String chat = group != null ? group : sender;
             boolean isGroup = group != null;
 
-            // Log incoming
             String text = decoded.text();
             String interactiveId = decoded.interactive() != null ? decoded.interactive().selectedId() : null;
             String interactiveType = decoded.interactive() != null ? decoded.interactive().kind() : null;
 
-            // Self-mode filtering
             boolean isFromSelf = isSelf(sender);
             if (Config.SELF && !isFromSelf) {
-                // If SELF mode is enabled, ignore all messages not from self JIDs
                 return;
             }
 
             Serialize.incoming(sender, chat, text != null ? text : (interactiveId != null ? "⚡ " + interactiveId : null));
 
-            // Skip messages with no text and no interactive content
             if ((text == null || text.isBlank()) && (interactiveId == null || interactiveId.isBlank())) {
                 return;
             }
 
-            // Build context
             var ctx = new Context(
                     sender, chat, decoded.msgId(),
                     text, interactiveType, interactiveId,
                     isGroup, decoded.message(), client);
 
-            // Route
             router.route(ctx);
 
         } catch (Exception e) {

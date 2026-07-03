@@ -8,22 +8,34 @@ import id.jawa.message.MessageEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Interactive menu command. Displays native WhatsApp flow buttons.
- *
- * <p>Trigger: {@code .menu} or interactive {@code menu_cmd}
- */
 public final class MenuCmd implements Cmd {
+
+    @Override
+    public String cmd() {
+        return "menu";
+    }
+
+    @Override
+    public String desc() {
+        return "Tampilkan menu bot";
+    }
+
+    @Override
+    public String tag() {
+        return "general";
+    }
+
+    @Override
+    public String[] alias() {
+        return new String[]{"m", "help"};
+    }
 
     @Override
     public void handle(Context ctx) throws Exception {
         var buttons = new ArrayList<MessageEncoder.CtaButton>();
-
-        // Quick reply buttons
         buttons.add(MessageEncoder.CtaButton.quickReply("🏓 Ping", "ping_cmd"));
         buttons.add(MessageEncoder.CtaButton.quickReply("ℹ️ Info", "info_cmd"));
 
-        // Dropdown single-select list
         var rows = List.of(
                 new MessageEncoder.ListRow("help_cmd", "📚 Help", "Tampilkan semua perintah"),
                 new MessageEncoder.ListRow("menu_cmd", "🔄 Menu", "Tampilkan menu ini kembali")
