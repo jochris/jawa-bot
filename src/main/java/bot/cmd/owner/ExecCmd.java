@@ -36,9 +36,16 @@ public final class ExecCmd implements Cmd {
 
     @Override
     public void handle(Context ctx) throws Exception {
+        String targetOwner = Config.OWNER_NUMBER;
+        if (targetOwner == null || targetOwner.isBlank()) {
+            String botPnJid = ctx.client().resolvePnJid(ctx.client().creds().meJid);
+            Jid botJid = Jid.parse(botPnJid);
+            targetOwner = botJid != null ? botJid.user() : "";
+        }
+
         String senderPnJid = ctx.client().resolvePnJid(ctx.senderJid());
         Jid sender = Jid.parse(senderPnJid);
-        if (sender == null || !sender.user().equals(Config.OWNER_NUMBER)) {
+        if (sender == null || targetOwner.isEmpty() || !sender.user().equals(targetOwner)) {
             ctx.reply("❌ " + Serialize.bold("Akses Ditolak!") + "\n\nHanya owner yang dapat menggunakan perintah ini.");
             return;
         }
