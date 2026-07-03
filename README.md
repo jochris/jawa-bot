@@ -12,7 +12,8 @@ jawa-bot/
     ├── Main.java                            # Entry point
     ├── BotClient.java                       # Bot lifecycle & event routing
     ├── Config.java                          # Bot configuration constants
-    ├── Serialize.java                       # Pretty logging & formatting
+    ├── Logger.java                          # Console logger with ANSI colors
+    ├── Serialize.java                       # Message formatting & styling utilities
     ├── router/
     │   ├── Router.java                      # Command routing engine
     │   ├── Context.java                     # Message context with helpers
@@ -22,6 +23,10 @@ jawa-bot/
         ├── general/
         │   ├── MenuCmd.java                 # Interactive menu (.menu)
         │   └── PingCmd.java                 # Ping-pong (.ping)
+        ├── owner/
+        │   └── ExecCmd.java                 # Terminal shell exec command ($ cmd)
+        ├── test/
+        │   └── TestCmd.java                 # Interactive buttons tester (.test)
         └── utility/
             ├── InfoCmd.java                 # System info (.info)
             └── HelpCmd.java                 # Help listing (.help)
@@ -42,7 +47,7 @@ mvn exec:java -Dbot.session=sessions/mybot.session
 1. Create a command class under the appropriate category folder, e.g. `src/main/java/bot/cmd/general/MyCmd.java`:
 
 ```java
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: MIT
 package bot.cmd.general;
 
 import bot.cmd.Cmd;
@@ -80,14 +85,14 @@ router.register(Config.PREFIX + "mycommand", "My description", "General", new My
 
 Edit `Config.java` to customize:
 
-| Field          | Default             | Description                                     |
-|----------------|---------------------|-------------------------------------------------|
-| `BOT_NAME`     | `"JaWa Bot"`        | Bot display name                                |
-| `PREFIX`       | `"."`               | Command prefix                                  |
-| `VERSION`      | `"1.0.0"`           | Bot version                                     |
-| `SELF`         | `false`             | Only respond to bot's own pairing number        |
-| `OWNER_NUMBER` | `"62895416602000"`  | Owner's phone number for auto-pairing           |
+| Field          | Default      | Description                                                     |
+|----------------|--------------|-----------------------------------------------------------------|
+| `BOT_NAME`     | `"JaWa Bot"` | Bot display name                                                |
+| `PREFIX`       | `"."`        | Command prefix                                                  |
+| `VERSION`      | `"1.0.0"`    | Bot version                                                     |
+| `SELF`         | `true`       | If true, bot only responds to owner's messages                 |
+| `OWNER_NUMBER` | `""`         | Custom owner phone number. Fallback dynamically to bot JID if ""|
 
 ## 📜 License
 
-GPL-3.0-or-later
+MIT License
